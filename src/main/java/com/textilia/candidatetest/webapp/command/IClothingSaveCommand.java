@@ -8,18 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Date;
 
 
-public interface IClothingSaveCommand extends JpaRepository<ClothItemEntity, Long> {
+public interface IClothingSaveCommand {
 
-    default ClothItemResponseDTO save(ClothItemRequestDTO clothItemRequestDTO, Date date) {
-        ClothItemEntity entity = new ClothItemEntity();
-        entity.setName(clothItemRequestDTO.getName());
-        entity.setSize(clothItemRequestDTO.getSize());
-        entity.setColor(clothItemRequestDTO.getColor());
-        entity.setCreatedTimestamp(date);
-        entity.setUpdatedTimestamp(date);
+    ClothItemResponseDTO save(ClothItemRequestDTO clothItemRequestDTO, Date date);
 
-        ClothItemEntity savedEntity = save(entity);
-
-        return new ClothItemResponseDTO(savedEntity);
-    }
 }

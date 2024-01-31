@@ -39,7 +39,7 @@ class ClothingControllerTest {
         requestDTO.setSize("M");
         requestDTO.setColor("Blue");
 
-        ClothItemResponseDTO responseDTO = new ClothItemResponseDTO();
+        ClothItemResponseDTO responseDTO = new ClothItemResponseDTO(new ClothItemEntity());
         responseDTO.setName("Shirt");
         responseDTO.setSize("M");
         responseDTO.setColor("Blue");

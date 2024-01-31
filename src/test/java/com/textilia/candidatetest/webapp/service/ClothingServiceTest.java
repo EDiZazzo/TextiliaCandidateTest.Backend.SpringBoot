@@ -8,8 +8,7 @@ import com.textilia.candidatetest.webapp.query.IClothingGetAllQuery;
 import com.textilia.candidatetest.webapp.validator.IClothItemRequestValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
@@ -23,17 +22,13 @@ import static org.mockito.Mockito.*;
 
 public class ClothingServiceTest {
 
-    @Mock
-    private IClothingSaveCommand clothingCommandRepository;
 
-    @Mock
-    private IClothingGetAllQuery clothingQueryRepository;
+    private IClothingSaveCommand clothingSaveCommand = Mockito.mock(IClothingSaveCommand.class);
+    private IClothingGetAllQuery clothingGetAllQuery = Mockito.mock(IClothingGetAllQuery.class);
 
-    @Mock
-    private IClothItemRequestValidator clothItemRequestValidator;
+    private IClothItemRequestValidator clothItemRequestValidator = Mockito.mock(IClothItemRequestValidator.class);;
 
-    @InjectMocks
-    private ClothingService clothingService;
+    private ClothingService clothingService = new ClothingService(clothingSaveCommand, clothingGetAllQuery, clothItemRequestValidator);
 
     @BeforeEach
     public void setUp() {
@@ -51,18 +46,14 @@ public class ClothingServiceTest {
         Date date = new Date();
         ClothItemResponseDTO responseDTO = new ClothItemResponseDTO(new ClothItemEntity());
 
-        // Mocking validation to return no errors
-        Errors errors = new BeanPropertyBindingResult(requestDTO, "clothItemRequestDTO");
-        doNothing().when(clothItemRequestValidator).validate(eq(requestDTO), any(Errors.class));
-
         // Mocking repository save method
-        when(clothingCommandRepository.save(eq(requestDTO), eq(date))).thenReturn(responseDTO);
+        when(clothingSaveCommand.save(eq(requestDTO), any())).thenReturn(responseDTO);
 
         // Calling the service method
         ClothItemResponseDTO savedItem = clothingService.saveClothingItem(requestDTO);
 
         // Verifying that the repository save method was called with the correct parameters
-        verify(clothingCommandRepository, times(1)).save(eq(requestDTO), eq(date));
+        verify(clothingSaveCommand, times(1)).save(eq(requestDTO), any());
 
         // Verifying that the returned item is not null
         assertNotNull(savedItem);
@@ -82,14 +73,14 @@ public class ClothingServiceTest {
         assertThrows(IllegalArgumentException.class, () -> clothingService.saveClothingItem(requestDTO));
 
         // Verifying that the repository save method was not called
-        verify(clothingCommandRepository, never()).save(any(), any());
+        verify(clothingSaveCommand, never()).save(any(), any());
     }
 
     @Test
     public void testGetAllClothingItems() {
         // Mocking repository getAll method
         List<ClothItemResponseDTO> expectedItems = Arrays.asList(new ClothItemResponseDTO(new ClothItemEntity()), new ClothItemResponseDTO(new ClothItemEntity()));
-        when(clothingQueryRepository.getAll()).thenReturn(expectedItems);
+        when(clothingGetAllQuery.getAll()).thenReturn(expectedItems);
 
         // Calling the service method
         List<ClothItemResponseDTO> actualItems = clothingService.getAllClothingItems();
@@ -99,6 +90,6 @@ public class ClothingServiceTest {
         assertEquals(expectedItems.size(), actualItems.size());
 
         // Verifying that the repository getAll method was called
-        verify(clothingQueryRepository, times(1)).getAll();
+        verify(clothingGetAllQuery, times(1)).getAll();
     }
 }

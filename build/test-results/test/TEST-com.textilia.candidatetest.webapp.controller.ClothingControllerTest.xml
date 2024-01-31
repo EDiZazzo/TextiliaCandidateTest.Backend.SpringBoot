@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.textilia.candidatetest.webapp.controller.ClothingControllerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2024-01-31T22:30:02" hostname="DESKTOP-CP2GGUO" time="2.172">
+  <properties/>
+  <testcase name="testAddClothingItem()" classname="com.textilia.candidatetest.webapp.controller.ClothingControllerTest" time="2.157"/>
+  <testcase name="testGetAllClothingItems()" classname="com.textilia.candidatetest.webapp.controller.ClothingControllerTest" time="0.008"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

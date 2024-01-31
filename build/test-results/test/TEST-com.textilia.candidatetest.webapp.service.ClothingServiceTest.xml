@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.textilia.candidatetest.webapp.service.ClothingServiceTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2024-01-31T22:30:05" hostname="DESKTOP-CP2GGUO" time="0.288">
+  <properties/>
+  <testcase name="testGetAllClothingItems()" classname="com.textilia.candidatetest.webapp.service.ClothingServiceTest" time="0.005"/>
+  <testcase name="testSaveClothingItem_InvalidRequest()" classname="com.textilia.candidatetest.webapp.service.ClothingServiceTest" time="0.275"/>
+  <testcase name="testSaveClothingItem_ValidRequest()" classname="com.textilia.candidatetest.webapp.service.ClothingServiceTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

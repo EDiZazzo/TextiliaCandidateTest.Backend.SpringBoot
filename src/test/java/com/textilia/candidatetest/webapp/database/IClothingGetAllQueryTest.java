@@ -1,5 +1,6 @@
 package com.textilia.candidatetest.webapp.database;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -9,21 +10,20 @@ import java.util.List;
 
 import com.textilia.candidatetest.webapp.model.ClothItemEntity;
 import com.textilia.candidatetest.webapp.model.ClothItemResponseDTO;
-import com.textilia.candidatetest.webapp.query.IClothingGetAllQuery;
+import com.textilia.candidatetest.webapp.query.ClothingGetAllQuery;
+import com.textilia.candidatetest.webapp.query.JpaClothQuery;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public class IClothingGetAllQueryTest {
 
-    @Mock
-    private JpaRepository<ClothItemEntity, Long> repositoryMock;
+    private JpaClothQuery clothingGetAllQuery = Mockito.mock(JpaClothQuery.class);
 
-    @InjectMocks
-    private IClothingGetAllQuery clothingGetAllQuery;
+    private ClothingGetAllQuery query = new ClothingGetAllQuery(clothingGetAllQuery);
 
     @BeforeEach
     public void setup() {
@@ -37,10 +37,10 @@ public class IClothingGetAllQueryTest {
         mockEntities.add(new ClothItemEntity(1L, "Shirt", "M", "Blue", new Date(), new Date()));
         mockEntities.add(new ClothItemEntity(2L, "Jeans", "S", "Black", new Date(), new Date()));
 
-        when(repositoryMock.findAll()).thenReturn(mockEntities);
+        when(clothingGetAllQuery.findAll()).thenReturn(mockEntities);
 
         // Act
-        List<ClothItemResponseDTO> responseDTOs = clothingGetAllQuery.getAll();
+        List<ClothItemResponseDTO> responseDTOs = query.getAll();
 
         // Assert
         assertEquals(mockEntities.size(), responseDTOs.size());
@@ -49,9 +49,16 @@ public class IClothingGetAllQueryTest {
             ClothItemEntity mockEntity = mockEntities.get(i);
             ClothItemResponseDTO responseDTO = responseDTOs.get(i);
 
-            assertEquals(mockEntity.getName(), responseDTO.getName());
-            assertEquals(mockEntity.getSize(), responseDTO.getSize());
-            assertEquals(mockEntity.getColor(), responseDTO.getColor());
+            assertAll("Cloth Item",
+                    () -> assertEquals(mockEntity.getName(), responseDTO.getName()),
+                    () -> assertEquals(mockEntity.getSize(), responseDTO.getSize()),
+                    () -> assertEquals(mockEntity.getColor(), responseDTO.getColor()),
+                    () -> assertEquals(mockEntity.getCreatedTimestamp(), responseDTO.getCreatedTimestamp()),
+                    () -> assertEquals(mockEntity.getUpdatedTimestamp(), responseDTO.getUpdatedTimestamp())
+            );
         }
+
+        // Verify interaction with the repository
+        verify(clothingGetAllQuery, times(1)).findAll();
     }
 }
