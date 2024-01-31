@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'war'
+    id 'org.springframework.boot' version '3.2.2'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.textilia.candidatetest'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.jetbrains:annotations:24.0.0'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.0.2'
+
+    implementation 'org.springframework.boot:spring-boot-starter-cache:2.4.3'
+    implementation 'io.swagger.core.v3:swagger-annotations-jakarta:2.2.7'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'com.h2database:h2'
+    implementation 'com.github.ben-manes.caffeine:caffeine'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
